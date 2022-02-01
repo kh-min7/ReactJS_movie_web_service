@@ -10,30 +10,31 @@
     const root = document.getElementById("root");
 
     function App() {
-      const [counter, modifier] = React.useState(0);
+      const [counter, setCounter] = React.useState(0);
+      function onClick() {
+        return setCounter(counter + 1);
+      }
+
       return (
         <div>
           <h3>Total clicks: {counter}</h3>
-          <button>Click me</button>
+          <button onClick={onClick}>Click me</button>
         </div>
       );
     }
 
-    ReactDOM.render(App(), root);
+    ReactDOM.render(<App />, root);
   </script>
 </html>
 
 <!--
-  리액트JS에서 데이터를 저장시켜 자동으로 리렌더링을 일으킬 수 있는 방법
-const data = React.useState();를 console.log 시키면
-[undefined, f ] -> undefined와 함수가 적힌 배열이 나타남
-undefined는 data이고 f는 data를 바꿀 때 사용하는 함수
-React.useState() 함수는 초기값을 설정할 수 있음
-즉, undefined는 초기값이고 두 번째 요소인 f는 그 값을 바꾸는 함수
-
-배열을 꺼내기
-const x = [1, 2, 3]
-const [a, b, c] = x;
-으로 꺼낼 수 있음
-ex) a === x[0]
+  React.useState() 배열에서
+보통 데이터에는 counter처럼 원하는대로 붙이고
+f는 set 뒤에 데이터 이름을 붙임 (setCounter)
+어떤값을 부여하던 setCounter 함수는 그 값으로 업데이트하고 리렌더링 일으킴
+1. counter라는 데이터를 받음
+2. return()에 그 데이터를 담고 있음 (리턴은 사용자가 보게될 컴포넌트)
+3. 버튼이 클릭되면 counter값을 바꿔줄 함수 호출 -> setCounter
+4. counter의 새로운 값을 가지고 counter 함수를 호출
+5. 그 새로운 값은 setCounter(counter + 1)에 써준 counter + 1
 -->
