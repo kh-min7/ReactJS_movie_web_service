@@ -8,35 +8,32 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
     const root = document.getElementById("root");
-    const Title = () => (
-      <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
-        Hello I'm a title
-      </h3>
-    );
-    const Button = () => (
-      <button
-        style={{ backgroundColor: "tomato" }}
-        onClick={() => console.log("im clicked")}
-      >
-        Click me
-      </button>
-    );
-    const Container = () => (
-      <div>
-        <Title />
-        <Button />
-      </div>
-    );
-    ReactDOM.render(<Container />, root);
+
+    function App() {
+      const [counter, modifier] = React.useState(0);
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3>
+          <button>Click me</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(App(), root);
   </script>
 </html>
 
 <!--
-  div에 const 넣기 위해선
-1. const를 함수로 만들어 줘야함 const Btn = () => ( );
--> arrow function 이라고 부름
-= () => ( ); 는 function Btn() { return ( ); } 와 같음
-2. HTML 태그처럼 만들어서 넣어줌
-3. (중요) 컴포넌트의 첫 글자는 반드시 대문자여야 함
--> 우리가 직접 만든 요소는 전부 대문자로 시작해야 함
+  리액트JS에서 데이터를 저장시켜 자동으로 리렌더링을 일으킬 수 있는 방법
+const data = React.useState();를 console.log 시키면
+[undefined, f ] -> undefined와 함수가 적힌 배열이 나타남
+undefined는 data이고 f는 data를 바꿀 때 사용하는 함수
+React.useState() 함수는 초기값을 설정할 수 있음
+즉, undefined는 초기값이고 두 번째 요소인 f는 그 값을 바꾸는 함수
+
+배열을 꺼내기
+const x = [1, 2, 3]
+const [a, b, c] = x;
+으로 꺼낼 수 있음
+ex) a === x[0]
 -->
