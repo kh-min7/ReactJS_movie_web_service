@@ -7,28 +7,30 @@
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-    function Btn({ text, big }) {
+    function Btn({ text, changeValue }) {
       return (
         <button
+          onClick={changeValue}
           style={{
             backgroundColor: "tomato",
             color: "white",
             padding: "10px 20px",
             border: 0,
             borderRadius: 10,
-            fontSize: big ? 18 : 16,
           }}
         >
           {text}
         </button>
       );
     }
-
+    const MemorizedBtn = React.memo(Btn);
     function App() {
+      const [value, setValue] = React.useState("Save changes");
+      const changeValue = () => setValue("Revert Changes");
       return (
         <div>
-          <Btn text="Save Changes" big={true} />
-          <Btn text="Continue" big={false} />
+          <MemorizedBtn text={value} changeValue={changeValue} />
+          <MemorizedBtn text="Continue" />
         </div>
       );
     }
@@ -36,3 +38,19 @@
     ReactDOM.render(<App />, root);
   </script>
 </html>
+
+<!-- 1. props에 function도 보낼 수 있음
+이것은 JSX로 html 태그 자체에 이벤트 리스너를 넣는것과는 전혀 다른 것임.
+그저 이벤트를 실행시키는 함수가 프로퍼티로 들어간 것임.
+prop은 그냥 부모에서 자식으로 데이터를 넘길 때 사용하는 argument의 역할이니까!
+
+2. (07:41~) 부모의 상태를 바꾸는 함수를 만들었고, 부모 컴포넌트에서 그 함수를 prop으로 보내면 자식 컴포넌트에서 그 함수가 실행된다.
+
+3. 불필요한 re-render는 React.memo()로 관리할 수 있음
+부모 컴포넌트의 state를 변경하면 당연히 그 자식 컴포넌트들도 Re-render가 일어남. 
+불필요한 렌더링이 발생할 수도 있는데, 이 경우에는 React.memo()로 prop의 변경이 일어난 부분만 렌더링 시킬 수 있음. 
+아주 많은 자식 컴포넌트를 가지고 있는 부모 컴포넌트일 때 사용하면 될듯.
+
+* React.memo()
+컴포넌트가 React.memo()로 wrapping 될 때, React는 컴포넌트를 렌더링하고 결과를 메모이징(Memoizing)한다. 
+그리고 다음 렌더링이 일어날 때 props가 같다면, React는 메모이징(Memoizing)된 내용을 재사용한다. -->
