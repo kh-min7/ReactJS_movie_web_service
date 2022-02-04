@@ -2,43 +2,52 @@ import Button from "./Button";
 import styles from "./App.module.css";
 import { useState, useEffect } from "react";
 
-function Hello() {
-  useEffect(() => {
-    console.log("hi :)");
-    return () => consolo.log("bye :(");
-  }, []);
-  return <h1>Hello</h1>;
-}
-
 function App() {
-  const [showing, setShowing] = useState(false);
-  const onClick = () => setShowing((prev) => !prev);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    setToDo("");
+    setToDos((currentArray) => [toDo, ...currentArray]);
+  };
+  console.log(toDos);
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My To Dos {toDos.length}</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          type="text"
+          placeholder="Write your to do..."
+        />
+        <button>Add to Do</button>
+      </form>
     </div>
   );
 }
 
 export default App;
 
-// Hello 컴포넌트를 hide할 때는 컴포넌트가 스크린에서 지워지고
-// show를 누르면 컴포넌트가 다시 생성되므로
-// useEffect도 다시 실행됨을 알 수 있다.
-// -> 정해준 useEffect가 컴포넌트가 생성될 때 콘솔 로그를 하라는 것이기 때문
-// function Hello() {
-// useEffect(() => {
-// console.log("Hi");
-// }, []);
+// form은 submit 이벤트를 갖고 있다.
+// 그러므로 evernt.preventDefault() 함수를 이용하여 기본 동작을 막자.
+// 여러 개의 toDo를 받을 수 있는 배열 만들기
+// const [toDos, setToDos] = useState([]); -> 기본값은 비어있는 배열
+// state는 직접적으로 수정 불가능 (예 : toDo = “” )
+// 함수를 가져와서 수정하게 만들어야함 (예 : setToDo = (“”) )
+// 그래서 toDos 배열을 수정하고 싶다면 수정하는 함수를 써야함
 
-// 컴포넌트가 destroy될 때도 코드를 실행할 수 있다
-// -> return으로 함수를 만들어주면 된다.
-// useEffect는 함수를 받고, 이 함수는 dependency가 변화할 때 호출됨
-// 현재는 dependency가 비어있으니 컴포넌트가 처음 생성될 때 함수가 호출된 후 다시
-// 호출 되지 않음
-// 그래서 컴포넌트가 파괴될 때도 함수를 실행하고 싶으면
-// useEffect 함수가 새로운 함수를 return해야 함
-// -> 왜냐면 deps가 비어있으면 자동으로 컴포넌트가 파괴될 때 cleanup함수가 실행되는데 그 과정이 리렌더링으로 useEffect함수가 실행되고 클린업하면서 이전에 있던 이펙트인 console.log(“created :) )가 삭제되고 새로운 이펙트 함수인 return함수가 실행되기 때문이다.
-// 리렌더링 -> 이전 이펙트 클린업 -> 이펙트 실행
-// (참고 https://simsimjae.tistory.com/401)
+// setToDos(currentArray => [toDo, ...currentArray]);
+// -> ...을 써서 currentArray 배열에 toDo를 추가 시켜줌
+// 어플리케이션이 시작될 때는 비어있는 배열을 가짐
+// 첫 번째 to-do를 입력할 때 비어있는 currentArray 받아옴
+// 이건 새로운 toDos가 input을 통해 작성한 toDo와
+// 아무것도 들어있지 않은 빈 배열의 element가 더해지게 된다는 것
+// 첫 번째 toDo 가 Hello라면 엔터를 눌러 실행됨
+// 그리고 byebye라고 적으면
+// currentArray에는 Hello 이미 있고 toDo는 byebye가 되는 것
+// 그리고 currentArray는 Hello와 byebye를 가지고 있는 배열이 됨
